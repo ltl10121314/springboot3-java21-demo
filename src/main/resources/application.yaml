@@ -30,21 +30,22 @@ spring:
     # develop
     # password: hbvzOoHcocB2y9SFtV8iWDjY5DKLXIjn
   # redis
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    #   database: 0   #默认就是0号库
-    #   password: 有密码的就可以设置 我这里没有设置密码
-    lettuce:
-      pool:
-        # 最大连接
-        max-active: 8
-        # 最大控线连接
-        max-idle: 8
-        # 最小空闲连接
-        min-idle: 0
-        # 连接等待时间
-        max-wait: 100
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      #   database: 0   #默认就是0号库
+      #   password: 有密码的就可以设置 我这里没有设置密码
+      lettuce:
+        pool:
+          # 最大连接
+          max-active: 8
+          # 最大控线连接
+          max-idle: 8
+          # 最小空闲连接
+          min-idle: 0
+          # 连接等待时间
+          max-wait: 100
 
 server:
   port: 8081
