@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+    <item name="公共薪资项目档案" resid="公共薪资项目档案" itemflag="waitemDoc" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.config.helper.WaItemDocVariableConvertor"
+                                   beanId="waMddItemDocVariableConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.WaItemDocDataSetImpl"
+                                   beanId="waItemDocDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>PK_PAYFILE</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <item name="发薪方案档案" resid="发薪方案档案" itemflag="waSchemeDoc" itemscope="psn">
+        <variable>
+            <content-creator-class
+                    name="com.yonyou.hrcloud.pay.calculate.mdd.pay.config.helper.WaSchemeDocVariableConvertor"
+                    beanId="waMddSchemeDocVariableConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.WaSchemeDocDataSetImpl"
+                                   beanId="waSchemeDocDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>PK_PAYFILE</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <item name="定调薪档案" resid="定调薪档案" itemflag="changeDoc" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.ChangeDocConvertor"
+                                   beanId="changeDocConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.ChangeDocDataSetImpl"
+                                   beanId="changeDocDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>PK_PAYFILE</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="薪资个别调整项目" resid="薪资个别调整项目" itemflag="waitemadjust" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.SchemeItemVariableConvertor"
+                                   beanId="schemeItemVariableConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.WaItemAdjustDataSetImpl"
+                                   beanId="waItemAdjustDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>PK_PAYFILE</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="薪资项目" resid="薪资项目" itemflag="waitem" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.SchemeItemVariableConvertor"
+                                   beanId="schemeItemVariableConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.WaItemDataSetImpl"
+                                   beanId="waItemDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>PK_PAYFILE</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="薪资依赖审核项目" resid="薪资依赖审核项目" itemflag="walastapproveitem" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.SchemeItemVariableConvertor"
+                                   beanId="schemeItemVariableConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.WaItemLastApproveDataSetImpl"
+                                   beanId="waItemLastApproveDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>PK_PAYFILE</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="考勤月报数据" resid="勤月报数据" itemflag="tsmonthitem" itemscope="psn">
+        <!--<variable>-->
+        <!--<content-creator-class name=""></content-creator-class>-->
+        <!--</variable>-->
+        <variable>
+            <content-creator-class
+                    name="com.yonyou.hrcloud.pay.calculate.mdd.pay.config.helper.MyTsMonthRptDefaultVariableConvertor"
+                    beanId="myTsMonthRptDefaultVariableConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.TsmonthitemDataSetImpl"
+                                   beanId="tsmonthitemDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>PK_PAYFILE</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="加班数据" resid="加班数据" itemflag="tsovertime" itemscope="psn">
+        <variable>
+            <content-creator-class
+                    name="com.yonyou.hrcloud.pay.calculate.mdd.pay.config.helper.MyTsOvertimeDefaultVariableConvertor"
+                    beanId="myTsOvertimeDefaultVariableConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.TsovertimeDataSetImpl"
+                                   beanId="tsovertimeDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="休假数据" resid="休假数据" itemflag="tsleave" itemscope="psn">
+        <variable>
+            <content-creator-class
+                    name="com.yonyou.hrcloud.pay.calculate.mdd.pay.config.helper.MyTsLeaveDefaultVariableConvertor"
+                    beanId="myTsLeaveDefaultVariableConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.TsleaveDataSetImpl"
+                                   beanId="tsleaveDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="休假结算工资数据" resid="休假结算工资数据" itemflag="tsleavesettlementsalary" itemscope="psn">
+        <variable>
+            <content-creator-class
+                    name="com.yonyou.hrcloud.pay.calculate.mdd.pay.config.helper.MyTsLeaveSettlementSalaryDefaultVariableConvertor"
+                    beanId="myTsLeaveSettlementSalaryDefaultVariableConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.TsleaveSettlementSalaryDataSetImpl"
+                                   beanId="tsleaveSettlementSalaryDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="出差数据" resid="出差数据" itemflag="tsaway" itemscope="psn">
+        <variable>
+            <content-creator-class
+                    name="com.yonyou.hrcloud.pay.calculate.mdd.pay.config.helper.MyTsAwayDefaultVariableConvertor"
+                    beanId="myTsAwayDefaultVariableConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.TsawayDataSetImpl"
+                                   beanId="tsawayDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <item name="人员基本信息" resid="人员基本信息" itemflag="ss_staff" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.common.formula.staff.atrr.collection.StaffAttrCollection"
+                                   beanId="staffAttrCollection">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StaffDataSetImpl"
+                                   beanId="staffDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="人员工作信息" resid="人员工作信息" itemflag="ss_staff_job" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.common.formula.staff.atrr.collection.JobAttrCollection"
+                                   beanId="jobAttrCollection">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StaffJobDataSetImpl"
+                                   beanId="staffJobDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_JOB_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <item name="人员组织信息" resid="人员组织信息" itemflag="ss_staff_org" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.common.formula.staff.atrr.collection.OrgAttrCollection"
+                                   beanId="orgAttrCollection">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StaffOrgDataSetImpl"
+                                   beanId="staffOrgDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_JOB_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <!-- 业务规则获取人员信息 -->
+    <item name="人员信息" resid="人员信息" itemflag="staff" itemscope="psn">
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StaffInfoDataSetImpl"
+                                   beanId="staffInfoDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="薪资发放单" resid="薪资发放单" itemflag="payfile" itemscope="psn">
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.WaPayfileDataSetImpl"
+                                   beanId="waPayfileDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="兼职信息" resid="兼职信息" itemflag="bd_staff_ptjob" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.formula.helper.convertor.StaffPartJobConvertor"
+                                   beanId="staffPartJobConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StaffPtjobDataSetImpl"
+                                   beanId="staffPtjobDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_JOB_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <item name="外部数据源" resid="外部数据源" itemflag="extdata" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.mdd.pay.config.helper.MyExtdataConvertor"
+                                   beanId="myExtdataConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.ExtdataDataSetImpl"
+                                   beanId="extdataDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <item name="累计附加费用扣除" resid="累计附加费用扣除" itemflag="accum_addi_deduct" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.AccumAddiDeductCalConvertor"
+                                   beanId="accumAddiDeductCalConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.AccumAddiDeductDataSetImpl"
+                                   beanId="accumAddiDeductDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <item name="薪资标准表" resid="薪资标准表" itemflag="waSalaryStandard" itemscope="psn">
+        <variable>
+            <content-creator-class
+                    name="com.yonyou.hrcloud.pay.calculate.mdd.pay.config.helper.WaSalaryStandardVariableConvertor"
+                    beanId="waMddSalaryStandardVariableConvertor">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.WaSalaryStandardDataSetImpl"
+                                   beanId="waSalaryStandardDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="试用信息" resid="试用信息" itemflag="ss_staff_probation" itemscope="psn">
+        <variable>
+            <content-creator-class
+                    name="com.yonyou.hrcloud.common.formula.staff.atrr.collection.StaffProbationCollection"
+                    beanId="staffProbationCollection">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.SSStaffProbationDataSetImpl"
+                                   beanId="SSStaffProbationDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <!-- 业务规则获取薪资档案信息 -->
+    <item name="人员信息" resid="人员信息" itemflag="waStaffPayDoc" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.WaStaffPayDocAttrCollection"
+                                   beanId="waStaffPayDocAttrCollection">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StaffPayDocDataSetImpl"
+                                   beanId="staffPayDocDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+    <item name="员工业务对象" resid="员工" itemflag="_ss_staff" itemscope="psn" type="2"
+          boId="81a4867a-94c8-4301-abef-460228f0a29e" maxdepth="2">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.common.formula.helper.var.StaffBizObjConvertor">
+            </content-creator-class>
+        </variable>
+
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StaffBizObjectDataSetImpl"
+                                   beanId="staffBizObjectDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <item name="学历信息" resid="学历信息" itemflag="ss_staff_edu" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.HREduAttrCollection"
+                                   beanId="hREduAttrCollection">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.SSStaffEduDataSetImpl"
+                                   beanId="SSStaffEduDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <item name="绩效记录" resid="绩效记录" itemflag="ss_staff_ass" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.HRAssAttrCollection"
+                                   beanId="hRAssAttrCollection">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.SSStaffAssDataSetImpl"
+                                   beanId="SSStaffAssDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <item name="其他任职信息" resid="其他任职信息" itemflag="staffPart" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StaffPartAttrCollection"
+                                   beanId="staffPartAttrCollection">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StaffPartDataSetImpl"
+                                   beanId="staffPartDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <item name="专业技术职务" resid="专业技术职务" itemflag="staffTechPost" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StaffTechPosttAttrCollection"
+                                   beanId="staffTechPosttAttrCollection">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StaffTechPostDataSetImpl"
+                                   beanId="staffTechPostDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+    <!-- 业务规则纳税人员 -->
+    <item name="纳税人员" resid="纳税人员" itemflag="stPersonInfo" itemscope="psn">
+        <variable>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StPersonInfoAttrCollection"
+                                   beanId="stPersonInfoAttrCollection">
+            </content-creator-class>
+        </variable>
+        <dataset>
+            <content-creator-class name="com.yonyou.hrcloud.pay.calculate.dataset.StPersonInfoDataSetImpl"
+                                   beanId="stPersonInfoDataSetImpl">
+            </content-creator-class>
+            <parameters>
+                <parameter>STAFF_ID</parameter>
+            </parameters>
+        </dataset>
+    </item>
+
+</items>

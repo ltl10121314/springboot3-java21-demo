@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--    <settings>-->
+    <!--        <setting name="useGeneratedKeys" value="true" />-->
+    <!--        <setting name="mapUnderscoreToCamelCase" value="true"/>-->
+    <!--        &lt;!&ndash; 多数据库适配Oracle &ndash;&gt;-->
+    <!--        <setting name="jdbcTypeForNull" value="NULL"/>-->
+    <!--        <setting name="logImpl" value="NO_LOGGING" />-->
+    <!--    </settings>-->
+
+    <typeHandlers>
+        <!--        <typeHandler javaType="java.util.Date" jdbcType="BIGINT" handler="org.example.springboot3java21demo.config.MddLong2DateTypeHandler"/>-->
+        <typeHandler javaType="java.lang.Object" jdbcType="VARCHAR" handler="org.apache.ibatis.type.StringTypeHandler"/>
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="CHAR" handler="org.apache.ibatis.type.StringTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="LONGVARCHAR" handler="org.apache.ibatis.type.StringTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="DECIMAL" handler="org.apache.ibatis.type.BigDecimalTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="NUMERIC" handler="org.apache.ibatis.type.BigDecimalTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="LONGVARBINARY" handler="org.apache.ibatis.type.BlobTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="BLOB" handler="org.apache.ibatis.type.BlobTypeHandler"/>-->
+        <!--        &lt;!&ndash; 防止出现typeint 转 short类型误转换成boolean类型       &ndash;&gt;-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="TINYINT" handler="org.apache.ibatis.type.IntegerTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="BIT" handler="org.apache.ibatis.type.BooleanTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="BOOLEAN" handler="org.apache.ibatis.type.BooleanTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="BIGINT" handler="org.apache.ibatis.type.LongTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="INTEGER" handler="org.apache.ibatis.type.IntegerTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="SMALLINT" handler="org.apache.ibatis.type.IntegerTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="FLOAT" handler="org.apache.ibatis.type.FloatTypeHandler"/>-->
+        <!--        &lt;!&ndash; <typeHandler javaType="java.lang.Object" jdbcType="REAL" handler="org.apache.ibatis.type.FloatTypeHandler"/>&ndash;&gt;-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="DOUBLE" handler="org.apache.ibatis.type.DoubleTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="CLOB" handler="org.apache.ibatis.type.ClobTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="NVARCHAR" handler="org.apache.ibatis.type.NStringTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="NCHAR" handler="org.apache.ibatis.type.NStringTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="NCLOB" handler="org.apache.ibatis.type.NClobTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="TIME" handler="org.apache.ibatis.type.TimeOnlyTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="DATE" handler="org.apache.ibatis.type.DateOnlyTypeHandler"/>-->
+        <!--        <typeHandler javaType="java.lang.Object" jdbcType="TIMESTAMP" handler="org.apache.ibatis.type.DateTypeHandler"/>-->
+    </typeHandlers>
+</configuration>

@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.yonyou.iuap.billcode.configuration.BillCodeAutoConfiguration

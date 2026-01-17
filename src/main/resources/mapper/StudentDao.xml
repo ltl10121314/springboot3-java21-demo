@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboot3java21demo.mapper.StudentDao">
+
+    <!--查询单个-->
+    <select id="queryById" resultType="org.example.springboot3java21demo.domain.Student">
+        select id,
+        name,
+        age,
+        beginDate,
+        endDate
+        from student
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultType="org.example.springboot3java21demo.domain.Student">
+        select id,
+        name,
+        age
+        from student limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultType="org.example.springboot3java21demo.domain.Student">
+        select
+        id, name, age
+        from student
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="age != null">
+                and age = #{age}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryStudentByCondition" resultType="org.example.springboot3java21demo.domain.Student">
+        select *
+        from student
+        where 1=1
+        <if test="param.ids  != null and param.ids.size > 0">
+            AND (id IN
+            <foreach collection="param.ids" item="item" index="index" separator="," open="(" close=")">
+                <if test="index%5 == 4 ">NULL) OR id IN (</if>#{item}
+            </foreach>
+            )
+        </if>
+        <if test="param.name != null and param.name == '张三9'">
+            and name = #{param.name}
+        </if>
+        <choose>
+            <when test="param.hasPayPeriod == true">
+                <choose>
+                    <when test="param.staffPayDocStatus == 2 or param.staffPayDocStatus == null">
+                        id = '1'
+                    </when>
+                    <otherwise>
+                        id = '2'
+                    </otherwise>
+                </choose>
+            </when>
+            <otherwise>
+
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into student(id, name, age)
+        values (#{id}, #{name}, #{age})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update student
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键修改数据-->
+    <update id="batchUpdate">
+        <foreach collection="values" item="item" index="index">
+            update ${tableName}
+            <set>
+                age = 11
+                ,name = '哈哈'
+            </set>
+            where id = #{item.id};
+        </foreach>
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from student
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteAll">
+        truncate table student
+    </delete>
+
+</mapper>
+

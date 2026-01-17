@@ -1,0 +1,77 @@
+spring:
+  aop:
+    # 启用自动代理生成
+    auto-proxy: true
+  application:
+    # 应用名称
+    name: springboot3-java21-demo
+  main:
+    # 支持循环依赖
+    allow-circular-references: true
+  # 数据库信息
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # localhost
+    url: jdbc:mysql://localhost:3306/my_test?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    # daily
+    # url: jdbc:mysql://dbproxy.diwork.com:12001/diwork_wa_mdd?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true
+    # develop
+    # url: jdbc:mysql://dbproxy.diwork.com:12368/diwork_wa_mdd?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true
+    # localhost
+    username: root
+    # daily
+    # username: ro_all_db
+    # develop
+    # username: bip_hr_serv
+    # localhost
+    password: ltl10121314
+    # daily
+    # password: 7hFYJo47kW6PYPAEbG75Lzvk
+    # develop
+    # password: hbvzOoHcocB2y9SFtV8iWDjY5DKLXIjn
+  # redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    #   database: 0   #默认就是0号库
+    #   password: 有密码的就可以设置 我这里没有设置密码
+    lettuce:
+      pool:
+        # 最大连接
+        max-active: 8
+        # 最大控线连接
+        max-idle: 8
+        # 最小空闲连接
+        min-idle: 0
+        # 连接等待时间
+        max-wait: 100
+
+server:
+  port: 8081
+
+# MyBatis配置
+mybatis:
+  type-aliases-package: org.example.springboot3java21demo.domain
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# MyBatis日志
+#logging:
+#  level:
+#    org.example.springboot3java21demo: DEBUG
+
+databaseSchema: my_test
+
+printTime:
+  cron: 0/10 * * * * ?
+
+# openapi
+#springdoc:
+#  api-docs:
+#    path: /api-docs
+#  swagger-ui:
+#    path: /swagger-ui.html
+#    configUrl: /v3/api-docs/swagger-config
+#  packages-to-scan: org.example.springboot3java21demo
