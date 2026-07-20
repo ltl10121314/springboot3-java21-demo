@@ -43,6 +43,9 @@
     <!--    <logger name="java.sql.Statement" level="DEBUG"/>-->
     <!--    <logger name="java.sql.PreparedStatement" level="DEBUG"/>-->
 
+    <!-- 添加这一行，作用是注册一个“什么都不做的”状态监听器 -->
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+
     <!-- 日志输出级别 -->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
