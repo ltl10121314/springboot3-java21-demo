@@ -1,5 +1,6 @@
 package org.example.springboot3java21demo.exercise.thread;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,15 +16,16 @@ import java.util.concurrent.FutureTask;
 /**
  * 
  */
+@Slf4j
 public class CallableThreadTest implements Callable<Integer> {
     private static final Logger LOGGER = LoggerFactory.getLogger(CallableThreadTest.class);
 
     public static void main(String[] args) {
         CallableThreadTest ctt = new CallableThreadTest();
         FutureTask<Integer> ft = new FutureTask<>(ctt);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 3; i++) {
             System.out.println(Thread.currentThread().getName() + " 的循环变量i的值" + i);
-            if (i == 20) {
+            if (i == 0) {
                 new Thread(ft, "有返回值的线程").start();
             }
         }
@@ -39,7 +41,7 @@ public class CallableThreadTest implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         int i = 0;
-        for (; i < 100; i++) {
+        for (; i < 4; i++) {
             LOGGER.error("{} {}", Thread.currentThread().getName(), i);
         }
         return i;

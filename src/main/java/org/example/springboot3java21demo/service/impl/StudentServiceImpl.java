@@ -1,5 +1,6 @@
 package org.example.springboot3java21demo.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.springboot3java21demo.domain.Student;
 import org.example.springboot3java21demo.log.MyLog;
 import org.example.springboot3java21demo.mapper.StudentDao;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Slf4j
 public class StudentServiceImpl implements StudentService, BeanNameAware {
 
     @Autowired
@@ -167,6 +169,6 @@ public class StudentServiceImpl implements StudentService, BeanNameAware {
 
     @Override
     public void setBeanName(String name) {
-        System.out.println("beanName:" + name);
+        log.info("beanName:{}", name);
     }
 }
