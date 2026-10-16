@@ -1,5 +1,6 @@
 package org.example.springboot3java21demo.service.impl;
 
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.springboot3java21demo.domain.Student;
 import org.example.springboot3java21demo.log.MyLog;
@@ -7,12 +8,15 @@ import org.example.springboot3java21demo.mapper.StudentDao;
 import org.example.springboot3java21demo.model.StudentParamVO;
 import org.example.springboot3java21demo.service.StudentService;
 import org.example.springboot3java21demo.service.UserService;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Connection;
 import java.util.List;
 
 @Service
@@ -28,6 +32,12 @@ public class StudentServiceImpl implements StudentService, BeanNameAware {
     @Autowired
     private UserService userService;
 
+    @Resource
+    private JdbcTemplate jdbcTemplate;
+
+    @Resource
+    private SqlSessionTemplate sqlSessionTemplate;
+
     /**
      * 通过ID查询单条数据
      *
@@ -37,6 +47,7 @@ public class StudentServiceImpl implements StudentService, BeanNameAware {
     @Override
     @MyLog
     public Student queryById(String id) {
+
         return studentDao.queryById(id);
     }
 

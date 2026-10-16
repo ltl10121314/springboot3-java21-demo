@@ -1,13 +1,11 @@
 spring:
-  aop:
-    # 启用自动代理生成
-    auto-proxy: true
   application:
     # 应用名称
     name: springboot3-java21-demo
   main:
     # 支持循环依赖
     allow-circular-references: true
+#    allow-bean-definition-overriding: true
   # 数据库信息
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -52,7 +50,7 @@ server:
 
 # MyBatis配置
 mybatis:
-  type-aliases-package: org.example.springboot3java21demo.domain
+#  type-aliases-package: org.example.springboot3java21demo.domain
   mapper-locations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
@@ -62,8 +60,6 @@ mybatis:
 #logging:
 #  level:
 #    org.example.springboot3java21demo: DEBUG
-
-databaseSchema: my_test
 
 printTime:
   cron: 0/10 * * * * ?

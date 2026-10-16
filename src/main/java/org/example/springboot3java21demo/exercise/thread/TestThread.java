@@ -5,15 +5,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 
+ *
  */
 public class TestThread {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestThread.class);
 
-    public static void main(String[] args) throws Exception {
+    private static volatile boolean isStop = false;
 
+    public static void main(String[] args) throws Exception {
+        new MyThread().start();
+        while (!isStop) {
+
+        }
+        LOGGER.info("stop");
+
+    }
+
+    public static void stopIt() {
+        isStop = true;
+    }
+
+    static class MyThread extends Thread {
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                LOGGER.error(e.getMessage());
+            }
+            stopIt();
+        }
     }
 
     @Test

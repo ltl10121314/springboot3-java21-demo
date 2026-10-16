@@ -14,6 +14,28 @@ public class FunctionExample {
     private static final Logger log = LoggerFactory.getLogger(FunctionExample.class);
 
     @Test
+    public void test() {
+        int a = 1;
+        function1(a);
+        log.info("a={}", a);
+        User user = new User();
+        function2(user);
+        log.info("user={}", user);
+    }
+
+    public void function1(int n) {
+        n = 23;
+        log.info("n={}", n);
+    }
+
+    public void function2(User userR) {
+        log.info("listR={}", userR);
+        userR.setName("Peter");
+        userR = new User();
+        log.info("userR={}", userR);
+    }
+
+    @Test
     public void test7() {
         Function<User, String> keyFunc = User::getName;
         BiConsumer<Item, User> consumer = (item, user) -> {

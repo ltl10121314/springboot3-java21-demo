@@ -1,6 +1,7 @@
 package org.example.springboot3java21demo.exercise.domain;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 
@@ -10,8 +11,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Slf4j
 public class User {
-    private String id;
+    public String id;
     private String code;
     private String name;
     private String age;
@@ -21,17 +23,17 @@ public class User {
     private User children;
 
     {
-        System.out.println("方法块");
+        log.info("方法块");
     }
 
     static {
-        System.out.println("静态方法块");
+        log.info("静态方法块");
     }
 
     public User(String id, String code, String name) {
         this.id = id;
         this.code = code;
         this.name = name;
-        System.out.println("构造方法");
+        log.info("构造方法");
     }
 }

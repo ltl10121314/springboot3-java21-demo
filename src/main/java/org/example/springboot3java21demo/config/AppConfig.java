@@ -1,6 +1,6 @@
 package org.example.springboot3java21demo.config;
 
-import org.example.springboot3java21demo.utils.SpringContextUtil;
+import org.example.springboot3java21demo.common.utils.SpringContextUtil;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;

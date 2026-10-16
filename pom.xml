@@ -28,6 +28,8 @@
     </scm>
     <properties>
         <java.version>21</java.version>
+        <!-- SkyWalking agent 与 toolkit 版本必须一致，否则 @Trace / TraceContext 不会生效 -->
+        <skywalking.version>9.3.0</skywalking.version>
     </properties>
     <dependencies>
         <!--springboot-->
@@ -159,6 +161,23 @@
             <version>3.5.1</version>
         </dependency>
 
+        <!--
+          SkyWalking 全链路追踪 toolkit。
+          这两个包的作用是：在没有 agent 时是无副作用的空实现，挂上 agent 后由 agent 的
+          apm-toolkit-activation 插件激活，提供 @Trace / ActiveSpan / TraceContext。
+          注意真正的探针是 skywalking-agent.jar（-javaagent 挂载），不是这两个依赖。
+        -->
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
+            <version>${skywalking.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-logback-1.x</artifactId>
+            <version>${skywalking.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -209,6 +228,8 @@
                     <include>**/*.properties</include>
                     -->
                     <include>**/*.yaml</include>
+                    <!-- ScheduleTask 通过 @PropertySource("classpath:task-config.ini") 读取 -->
+                    <include>**/*.ini</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>

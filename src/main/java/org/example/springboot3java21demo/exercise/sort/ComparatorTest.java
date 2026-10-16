@@ -24,20 +24,6 @@ public class ComparatorTest {
         employees.add(e2);
         employees.add(e3);
 
-        /**
-         *     @SuppressWarnings({"unchecked", "rawtypes"})
-         *     default void sort(Comparator<? super E> c) {
-         *         Object[] a = this.toArray();
-         *         Arrays.sort(a, (Comparator) c);
-         *         ListIterator<E> i = this.listIterator();
-         *         for (Object e : a) {
-         *             i.next();
-         *             i.set((E) e);
-         *         }
-         *     }
-         *
-         *     sort 对象接收一个 Comparator 函数式接口，可以传入一个lambda表达式
-         */
         employees.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
 
         Collections.sort(employees, (o1, o2) -> o1.getName().compareTo(o2.getName()));

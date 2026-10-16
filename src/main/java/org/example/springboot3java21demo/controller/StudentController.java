@@ -5,10 +5,11 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
+import org.example.springboot3java21demo.common.utils.SpringContextUtil;
 import org.example.springboot3java21demo.domain.Student;
 import org.example.springboot3java21demo.service.StudentService;
 import org.example.springboot3java21demo.service.UserService;
-import org.example.springboot3java21demo.utils.SpringContextUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +24,12 @@ public class StudentController {
      * 服务对象
      */
     @Resource
-    private StudentService studentService;
+    private final StudentService studentService;
+
+    @Autowired
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
     /**
      * 通过主键查询单条数据
@@ -35,6 +41,8 @@ public class StudentController {
     public Student selectOne(@Param("id") String id) {
         log.info("hello");
         SpringContextUtil.getBean(UserService.class).findAll();
+        studentService.test();
+        StudentService.test2();
         return SpringContextUtil.getBean(StudentService.class).queryById(id);
     }
 

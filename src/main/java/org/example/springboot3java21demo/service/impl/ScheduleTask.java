@@ -3,6 +3,7 @@ package org.example.springboot3java21demo.service.impl;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
@@ -17,7 +18,7 @@ import java.util.Date;
 @Data
 @Slf4j
 @Component
-//@PropertySource("classpath:/task-config.ini")
+@PropertySource("classpath:task-config.ini")
 public class ScheduleTask implements SchedulingConfigurer {
 
     @Value("${printTime.cron}")
