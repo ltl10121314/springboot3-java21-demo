@@ -68,11 +68,11 @@ public interface StudentService {
     void task2();
 
     default void test() {
-        System.out.println("test");
+        System.out.println(StudentService.class.getName() + "test");
     }
 
     static void test2() {
-        System.out.println("test2");
+        System.out.println(StudentService.class.getName() + "test2");
     }
 
 }

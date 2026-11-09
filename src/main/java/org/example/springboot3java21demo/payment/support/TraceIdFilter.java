@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.example.springboot3java21demo.payment.constant.PaymentConstants;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -21,12 +22,12 @@ import java.io.IOException;
 public class TraceIdFilter extends OncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         String traceId = request.getHeader(PaymentConstants.TRACE_ID_HEADER);
         if (traceId == null || traceId.isBlank()) {
-            traceId = TraceContext.newTraceId();
+            traceId = TraceContext.currentOrCreate();
         }
         TraceContext.set(traceId);
         response.setHeader(PaymentConstants.TRACE_ID_HEADER, traceId);

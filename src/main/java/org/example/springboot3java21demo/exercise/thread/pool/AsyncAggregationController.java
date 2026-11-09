@@ -12,11 +12,11 @@ import org.springframework.web.context.request.async.DeferredResult;
  */
 @RestController
 @RequestMapping("/api/user")
-public class UserController {
+public class AsyncAggregationController {
 
     private final AsyncAggregationService aggregationService;
 
-    public UserController(AsyncAggregationService aggregationService) {
+    public AsyncAggregationController(AsyncAggregationService aggregationService) {
         this.aggregationService = aggregationService;
     }
 

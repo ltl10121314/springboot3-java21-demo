@@ -1,9 +1,7 @@
 package org.example.springboot3java21demo.service.impl;
 
 import jakarta.annotation.Resource;
-import org.example.springboot3java21demo.domain.Student;
 import org.example.springboot3java21demo.domain.User;
-import org.example.springboot3java21demo.mapper.StudentDao;
 import org.example.springboot3java21demo.mapper.UserDao;
 import org.example.springboot3java21demo.service.UserService;
 import org.springframework.stereotype.Service;
@@ -18,9 +16,6 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserDao userDao;
 
-    @Resource
-    private StudentDao studentDao;
-
     @Override
     public List<User> findAll() {
         return userDao.findAll();
@@ -28,9 +23,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Student insert(Student student) {
-        studentDao.insert(student);
-        return student;
+    public Integer insert(User user) {
+        return userDao.insert(user);
     }
 
     @Override

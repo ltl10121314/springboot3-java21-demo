@@ -17,10 +17,6 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class ExampleTest {
-    private static final NavigableMap<Integer, Integer> rankingMap = Maps.newTreeMap();
-    private static Map<String, User> map = new HashMap<>();
-    private static Map<String, User> map3 = new HashMap<>();
-    private static Map<String, String> map2 = new HashMap<>();
 
     public static void main(String[] args) {
         String s = "ab";
@@ -45,10 +41,11 @@ public class ExampleTest {
 
     @Test
     public void test1() {
-        List<String> list = List.of("a","b","c");
+        List<String> list = List.of("a", "b", "c");
 //        String s = StringUtils.collectionToCommaDelimitedString(list);
-        String s = StringUtils.collectionToDelimitedString(list,",");
+        String s = StringUtils.collectionToDelimitedString(list, ",");
         log.info(s);
+        log.info(ExampleTest.class.getSimpleName());
     }
 
     private void traversalCategory(Category next, List<String> categoryIdList, Iterator<Category> iterator) {
@@ -67,7 +64,7 @@ public class ExampleTest {
     }
 
     @Test
-    public void categoryTest(){
+    public void categoryTest() {
         List<Category> categories = dealCategoryNode(creatList());
         String s = StringUtils.collectionToCommaDelimitedString(categories);
         log.info(s);
@@ -166,7 +163,9 @@ public class ExampleTest {
         log.info(user_3.toString());
     }
 
-    static {
+    @Test
+    public void rankingMapTest() {
+        NavigableMap<Integer, Integer> rankingMap = Maps.newTreeMap();
         rankingMap.put(1, 1);  //ranking 1 ->1
         rankingMap.put(2, 2); //ranking 2 ->2
         rankingMap.put(3, 3); //ranking 3 -> 3
@@ -174,30 +173,6 @@ public class ExampleTest {
         rankingMap.put(11, 5); //ranking 11-20 ->5
         rankingMap.put(21, 6); //ranking 21-30 ->6
         rankingMap.put(31, 7); //ranking >= 31 ->7
-        User user1 = new User();
-        user1.setId("1");
-        user1.setName("张三");
-        User user2 = new User();
-        user2.setId("2");
-        user2.setName("王麻子");
-        user1.setChildren(user2);
-        map.put("1", user1);
-        User user3 = new User();
-        user3.setId("3");
-        user3.setName("李四");
-        User user4 = new User();
-        user4.setId("4");
-        user4.setName("王五");
-        user3.setChildren(user4);
-        User user5 = new User();
-        user5.setId("5");
-        user5.setName("李六");
-        user4.setChildren(user5);
-        map.put("3", user3);
-        map3.put("1", user1);
-        map3.put("2", user2);
-        map3.put("3", user3);
-        map3.put("4", user4);
-        map3.put("5", user5);
+
     }
 }

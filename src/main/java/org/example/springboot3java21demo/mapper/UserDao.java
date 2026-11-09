@@ -24,12 +24,12 @@ public interface UserDao {
     List<User> findAll();
 
     /**
-     * 插入学生信息
+     * 插入用户信息
      *
-     * @param student 学生
-     * @return 学生
+     * @param user 用户
+     * @return 插入用户数量
      */
-    int insert(Student student);
+     Integer insert(User user);
 
     /**
      * 根据ID批量查询用户信息

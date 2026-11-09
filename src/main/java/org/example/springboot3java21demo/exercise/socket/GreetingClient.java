@@ -11,7 +11,7 @@ public class GreetingClient {
 //        String serverName = args[0];
         String serverName = "localhost";
 //        int port = Integer.parseInt(args[1]);
-        int port = Integer.parseInt("6066");
+        int port = Integer.parseInt("8089");
         try {
             System.out.println("连接到主机：" + serverName + " ，端口号：" + port);
             Socket client = new Socket(serverName, port);

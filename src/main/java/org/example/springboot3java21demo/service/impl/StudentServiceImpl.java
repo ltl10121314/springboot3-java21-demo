@@ -3,7 +3,6 @@ package org.example.springboot3java21demo.service.impl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.springboot3java21demo.domain.Student;
-import org.example.springboot3java21demo.log.MyLog;
 import org.example.springboot3java21demo.mapper.StudentDao;
 import org.example.springboot3java21demo.model.StudentParamVO;
 import org.example.springboot3java21demo.service.StudentService;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Connection;
 import java.util.List;
 
 @Service
@@ -45,9 +43,7 @@ public class StudentServiceImpl implements StudentService, BeanNameAware {
      * @return 实例对象
      */
     @Override
-    @MyLog
     public Student queryById(String id) {
-
         return studentDao.queryById(id);
     }
 

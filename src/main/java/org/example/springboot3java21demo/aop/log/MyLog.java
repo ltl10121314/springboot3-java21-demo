@@ -1,4 +1,4 @@
-package org.example.springboot3java21demo.log;
+package org.example.springboot3java21demo.aop.log;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

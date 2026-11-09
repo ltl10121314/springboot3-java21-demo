@@ -24,7 +24,7 @@ public interface UserService {
      * @param student 学生
      * @return
      */
-    Student insert(Student student);
+    Integer insert(User student);
 
     /**
      * 批量查询用户

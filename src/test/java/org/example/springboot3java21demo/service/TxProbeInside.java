@@ -34,6 +34,32 @@ public class TxProbeInside {
         return state("queryState");
     }
 
+    // ---- 下面这些方法只为验证"前缀规则表本身"（不会被调用）：每个前缀家族留一个方法名 ----
+
+    public void saveProbe() {
+    }
+
+    public void createProbe() {
+    }
+
+    public void updateProbe() {
+    }
+
+    public void deleteProbe() {
+    }
+
+    public String getProbe() {
+        return state("getProbe");
+    }
+
+    public String findProbe() {
+        return state("findProbe");
+    }
+
+    public String listProbe() {
+        return state("listProbe");
+    }
+
     /** this 自调用：不经过代理，queryState 上的事务属性不会生效。 */
     public String selfInvokeState() {
         return "self->" + this.queryState();

@@ -1,5 +1,6 @@
 package org.example.springboot3java21demo.payment.support;
 
+import org.example.springboot3java21demo.common.utils.ExtMDCLogUtil;
 import org.example.springboot3java21demo.payment.constant.PaymentConstants;
 import org.slf4j.MDC;
 
@@ -23,7 +24,8 @@ public final class TraceContext {
     public static String currentOrCreate() {
         String traceId = MDC.get(PaymentConstants.TRACE_ID_MDC_KEY);
         if (traceId == null || traceId.isBlank()) {
-            traceId = newTraceId();
+            // traceId = newTraceId();
+            traceId = ExtMDCLogUtil.getTraceId();
             MDC.put(PaymentConstants.TRACE_ID_MDC_KEY, traceId);
         }
         return traceId;

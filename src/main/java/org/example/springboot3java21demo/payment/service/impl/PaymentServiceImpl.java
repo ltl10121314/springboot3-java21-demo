@@ -1,6 +1,7 @@
 package org.example.springboot3java21demo.payment.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.springboot3java21demo.aop.log.MyLog;
 import org.example.springboot3java21demo.payment.constant.PaymentConstants;
 import org.example.springboot3java21demo.payment.constant.PaymentErrorCode;
 import org.example.springboot3java21demo.payment.domain.PaymentOrder;
@@ -80,6 +81,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @MyLog
     public PaymentResult pay(PaymentRequest request) {
         validate(request);
         String traceId = TraceContext.currentOrCreate();
@@ -94,7 +96,8 @@ public class PaymentServiceImpl implements PaymentService {
 
         long start = System.nanoTime();
         try {
-            return doPay(request, traceId);
+            throw new RuntimeException("异常");
+//            return doPay(request, traceId);
         } finally {
             metrics.recordLatency(System.nanoTime() - start);
         }

@@ -5,8 +5,8 @@
 <mapper namespace="org.example.springboot3java21demo.mapper.UserDao">
     <!--新增所有列-->
     <insert id="insert" parameterType="org.example.springboot3java21demo.domain.User">
-        insert into student(id, name, age)
-        values (#{id}, #{name}, #{age})
+        insert into user(id, code, name, age, address)
+        values (#{id}, #{code}, #{name}, #{age}, #{address})
     </insert>
 
     <!--    <select id="findAll" resultType="org.example.springboot3java21demo.domain.User">-->

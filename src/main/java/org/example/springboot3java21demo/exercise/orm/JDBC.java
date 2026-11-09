@@ -3,10 +3,7 @@ package org.example.springboot3java21demo.exercise.orm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 @Slf4j
 public class JDBC {
@@ -16,27 +13,59 @@ public class JDBC {
 
     public static void main(String[] args) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            // Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             Statement statement = conn.createStatement();
-//            String sql = "INSERT INTO wa_group_doc\n" +
-//                    "(ID, CODE, NAME, NAME2, NAME3, NAME4, NAME5, NAME6, ENABLE, CREATOR, CREATIONTIME, MODIFIER, MODIFIEDTIME, TS, DESCRIPTION, DESCRIPTION2, DESCRIPTION3, DESCRIPTION4, DESCRIPTION5, DESCRIPTION6, ORGID, TENANTID, YTENANT_ID)\n" +
-//                    "VALUES('d39cdcdfc69e4357a5b5eadd26a88a48', 'wageGroup5', '薪资组11', 'wegeGroup3', '薪资组', NULL, NULL, NULL, 1, '96b61a89-f6a7-4a7e-b449-2f566fb82caa', '2022-04-18 01:20:04', NULL, NULL, '2022-04-18 01:20:04', '薪资组', 'wegeGroup', '薪资组', NULL, NULL, NULL, 'AA', '0000L0GCJTKI6JSSV00000', '0000L0GCJTKI6JSSV00000');\n";
-            //把表名称包起来,这样就能实现数据的插入更新了
-            String sql = "UPDATE my_test.wa_group_doc\n" +
-                    "SET ID='d39cdcdfc69e4357a5b5eadd26a88a38', CODE='wageGroup5', NAME='薪资组11', NAME2='wegeGroup3', NAME3='薪资组', NAME4=NULL, NAME5=NULL, NAME6=NULL, ENABLE=1, CREATOR='96b61a89-f6a7-4a7e-b449-2f566fb82caa', CREATIONTIME='2022-04-18 01:20:04', MODIFIER=NULL, MODIFIEDTIME=NULL, TS='2022-04-18 01:20:04', DESCRIPTION='薪资组', DESCRIPTION2='wegeGroup', DESCRIPTION3='薪资组', DESCRIPTION4=NULL, DESCRIPTION5=NULL, DESCRIPTION6=NULL, ORGID='AA', TENANTID='0000L0GCJTKI6JSSV00000', YTENANT_ID='0000L0GCJTKI6JSSV00000';\n";
-            statement.executeUpdate(sql);
+            String sql = "select * from my_test.user";
+            ResultSet resultSet = statement.executeQuery(sql);
+            JDBC.printResultSet(resultSet);
+            resultSet.close();
             statement.close();
             conn.close();
-        } catch (SQLException e) {
-            if (StringUtils.indexOfIgnoreCase(e.getMessage(), "wa_group_doc.code") != -1) {
-                log.error("编码重复");
-            } else {
-
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行 SQL 失败", e);
         }
 
+    }
+
+    /**
+     * 打印 ResultSet 的完整数据：列名、列类型、每行数据、总行数。
+     *
+     * @param resultSet 查询结果集
+     * @throws SQLException 读取结果集失败
+     */
+    private static void printResultSet(ResultSet resultSet) throws SQLException {
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        // 打印列名和数据库类型，方便对照表结构
+        StringBuilder columns = new StringBuilder();
+        for (int i = 1; i <= columnCount; i++) {
+            if (i > 1) {
+                columns.append(" | ");
+            }
+            columns.append(metaData.getColumnLabel(i))
+                    .append("(")
+                    .append(metaData.getColumnTypeName(i))
+                    .append(")");
+        }
+        log.info("查询结果列: {}", columns);
+
+        // 逐行打印，NULL 单独标记，避免和字符串 "null" 混淆
+        int rowCount = 0;
+        while (resultSet.next()) {
+            rowCount++;
+            StringBuilder row = new StringBuilder();
+            for (int i = 1; i <= columnCount; i++) {
+                if (i > 1) {
+                    row.append(" | ");
+                }
+                Object value = resultSet.getObject(i);
+                row.append(value == null ? "NULL" : value);
+            }
+            log.info("第 {} 行: {}", rowCount, row);
+        }
+
+        log.info("查询结果共 {} 行", rowCount);
     }
 }

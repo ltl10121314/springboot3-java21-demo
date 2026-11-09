@@ -36,7 +36,7 @@ public class ThreadPoolMonitor {
      * 每 30 秒输出一次线程池指标，可通过 app.thread-pool.monitor-interval-ms 覆盖
      * 生产环境建议接入 Prometheus + Grafana 做可视化监控
      */
-    @Scheduled(fixedRateString = "${app.thread-pool.monitor-interval-ms:30000}")
+    @Scheduled(fixedRateString = "${app.thread-pool.monitor-interval-ms:300000}")
     public void monitorThreadPool() {
         logMetrics("CPU", cpuExecutor);
         logMetrics("IO", ioExecutor);

@@ -74,8 +74,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into student(id, name, age)
-        values (#{id}, #{name}, #{age})
+        insert into student(id, name, age, beginDate, endDate)
+        values (#{id}, #{name}, #{age}, #{beginDate}, #{endDate})
     </insert>
 
     <!--通过主键修改数据-->

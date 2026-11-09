@@ -1,4 +1,4 @@
-package org.example.springboot3java21demo.exercise.pointcut;
+package org.example.springboot3java21demo.aop;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
