@@ -69,12 +69,14 @@ printTime:
 # 启动 Broker 后通过 APP_ROCKETMQ_ENABLED=true 或 --app.rocketmq.enabled=true 开启。
 app:
   rocketmq:
-    enabled: false
+    enabled: true
     # RocketMQ 5.x 新客户端连接 Proxy 的 gRPC Endpoint，而不是 NameServer。
     endpoint: 127.0.0.1:8081
     topic: practice-order-topic
+    delay-topic: practice-order-delay-topic
     business-consumer-group: practice-order-business-group
     audit-consumer-group: practice-order-audit-group
+    dead-letter-consumer-group: practice-order-dlq-group
     # RocketMQ Tag 过滤表达式使用 || 表示“或”。
     business-tags: "ORDER_CREATED || ORDER_PAID"
     # 审计组只订阅 ORDER_CREATED，用于演示同一 Topic 下的 Tag 隔离。
@@ -83,6 +85,8 @@ app:
     send-max-attempts: 3
     consume-thread-count: 2
     recent-message-limit: 100
+    dead-letter-recent-limit: 100
+    idempotency-cache-size: 1000
 
 # openapi
 #springdoc:

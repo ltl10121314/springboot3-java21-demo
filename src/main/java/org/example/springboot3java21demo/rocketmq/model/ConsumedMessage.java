@@ -13,6 +13,7 @@ public record ConsumedMessage(
         String tag,
         String key,
         int deliveryAttempt,
+        ConsumeStatus status,
         String payload,
         Instant consumedAt) {
 }

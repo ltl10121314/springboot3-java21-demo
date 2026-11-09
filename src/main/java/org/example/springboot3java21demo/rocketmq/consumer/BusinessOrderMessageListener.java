@@ -4,9 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.apis.consumer.ConsumeResult;
 import org.apache.rocketmq.client.apis.consumer.MessageListener;
 import org.apache.rocketmq.client.apis.message.MessageView;
+import org.example.springboot3java21demo.rocketmq.common.RocketMqConstants;
+import org.example.springboot3java21demo.rocketmq.common.RocketMqMessageSupport;
 import org.example.springboot3java21demo.rocketmq.config.RocketMqProperties;
+import org.example.springboot3java21demo.rocketmq.model.ConsumeStatus;
 import org.example.springboot3java21demo.rocketmq.model.OrderEvent;
 import org.example.springboot3java21demo.rocketmq.service.OrderMessageConsumptionService;
+import org.example.springboot3java21demo.rocketmq.service.RocketMqIdempotencyStore;
+import org.example.springboot3java21demo.rocketmq.service.RocketMqMetrics;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,34 +23,75 @@ public class BusinessOrderMessageListener implements MessageListener {
 
     private final RocketMqProperties properties;
     private final OrderMessageConsumptionService consumptionService;
+    private final RocketMqIdempotencyStore idempotencyStore;
+    private final RocketMqMetrics metrics;
 
     public BusinessOrderMessageListener(
             RocketMqProperties properties,
-            OrderMessageConsumptionService consumptionService) {
+            OrderMessageConsumptionService consumptionService,
+            RocketMqIdempotencyStore idempotencyStore,
+            RocketMqMetrics metrics) {
         this.properties = properties;
         this.consumptionService = consumptionService;
+        this.idempotencyStore = idempotencyStore;
+        this.metrics = metrics;
     }
 
     @Override
     public ConsumeResult consume(MessageView message) {
+        long startedAt = System.nanoTime();
+        metrics.increment(RocketMqMetrics.Metric.CONSUME_ATTEMPT);
+        String consumerGroup = properties.getBusinessConsumerGroup();
+        log.info("业务消费开始 group={}, messageId={}, tag={}, key={}, deliveryAttempt={}",
+                consumerGroup,
+                message.getMessageId(),
+                message.getTag().orElse(null),
+                RocketMqMessageSupport.keys(message),
+                message.getDeliveryAttempt());
         try {
-            OrderEvent event = consumptionService.record(
-                    properties.getBusinessConsumerGroup(), message);
-            log.info("业务消费成功 group={}, topic={}, tag={}, key={}, eventId={}, type={}, attempt={}",
-                    properties.getBusinessConsumerGroup(),
+            OrderMessageConsumptionService.DecodedMessage decoded = consumptionService.decode(message);
+            OrderEvent event = decoded.event();
+            String failConsumerGroup = message.getProperties()
+                    .get(RocketMqConstants.FAIL_CONSUMER_GROUP_PROPERTY);
+            if (RocketMqConstants.shouldSimulateFailure(failConsumerGroup, consumerGroup)) {
+                consumptionService.record(consumerGroup, message, decoded, ConsumeStatus.RETRY);
+                metrics.increment(RocketMqMetrics.Metric.CONSUME_RETRY);
+                log.warn("业务消费模拟失败，返回 FAILURE 等待 RocketMQ 重试 group={}, messageId={}, eventId={}, deliveryAttempt={}",
+                        consumerGroup, message.getMessageId(), event.eventId(), message.getDeliveryAttempt());
+                return ConsumeResult.FAILURE;
+            }
+
+            if (!idempotencyStore.tryMarkProcessed(consumerGroup, event.eventId())) {
+                consumptionService.record(consumerGroup, message, decoded, ConsumeStatus.DUPLICATE);
+                metrics.increment(RocketMqMetrics.Metric.CONSUME_DUPLICATE);
+                log.warn("业务重复消息已忽略 group={}, messageId={}, eventId={}, deliveryAttempt={}",
+                        consumerGroup, message.getMessageId(), event.eventId(), message.getDeliveryAttempt());
+                return ConsumeResult.SUCCESS;
+            }
+
+            consumptionService.record(consumerGroup, message, decoded, ConsumeStatus.CONSUMED);
+            metrics.increment(RocketMqMetrics.Metric.CONSUME_SUCCESS);
+            log.info("业务消费成功 group={}, topic={}, tag={}, key={}, eventId={}, type={}, attempt={}, elapsedMs={}",
+                    consumerGroup,
                     message.getTopic(),
                     message.getTag().orElse(null),
-                    message.getKeys(),
+                    RocketMqMessageSupport.keys(message),
                     event.eventId(),
                     event.eventType(),
-                    message.getDeliveryAttempt());
+                    message.getDeliveryAttempt(),
+                    elapsedMillis(startedAt));
             return ConsumeResult.SUCCESS;
         } catch (Exception e) {
             // FAILURE 会触发重试；RocketMQ 5.x 服务端负责重试和死信策略。
-            log.error("业务消费失败 group={}, messageId={}, attempt={}",
-                    properties.getBusinessConsumerGroup(), message.getMessageId(),
-                    message.getDeliveryAttempt(), e);
+            metrics.increment(RocketMqMetrics.Metric.CONSUME_RETRY);
+            log.error("业务消费异常，返回 FAILURE group={}, messageId={}, attempt={}, elapsedMs={}",
+                    consumerGroup, message.getMessageId(), message.getDeliveryAttempt(),
+                    elapsedMillis(startedAt), e);
             return ConsumeResult.FAILURE;
         }
+    }
+
+    private long elapsedMillis(long startedAt) {
+        return (System.nanoTime() - startedAt) / 1_000_000;
     }
 }

@@ -21,6 +21,8 @@ RocketMQ Server 5.3.2
 - PushConsumer 消费、失败重试与优雅关闭
 - Spring Boot 管理 Producer/Consumer 生命周期
 - Topic、Tag 过滤和 ConsumerGroup 隔离
+- 真实 `%DLQ%` 死信消费、查询与一次重放
+- 消费幂等、失败注入、延迟消息和运行指标
 - 本地 RocketMQ Proxy 接入、Topic/ConsumerGroup 初始化
 
 RocketMQ Proxy 使用 `8081`，应用默认使用 `18081`，避免端口冲突：

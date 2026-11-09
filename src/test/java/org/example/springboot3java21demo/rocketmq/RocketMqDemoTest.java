@@ -1,8 +1,13 @@
 package org.example.springboot3java21demo.rocketmq;
 
+import org.example.springboot3java21demo.rocketmq.common.RocketMqConstants;
+import org.example.springboot3java21demo.rocketmq.config.RocketMqProperties;
+import org.example.springboot3java21demo.rocketmq.model.ConsumeStatus;
 import org.example.springboot3java21demo.rocketmq.model.ConsumedMessage;
 import org.example.springboot3java21demo.rocketmq.model.OrderEventType;
 import org.example.springboot3java21demo.rocketmq.service.ConsumedMessageStore;
+import org.example.springboot3java21demo.rocketmq.service.DeadLetterStore;
+import org.example.springboot3java21demo.rocketmq.service.RocketMqIdempotencyStore;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -48,9 +53,63 @@ class RocketMqDemoTest {
                 .containsExactly(3L, 2L);
     }
 
+    @Test
+    void idempotencyStoreAcceptsOnlyFirstEventForEachConsumerGroup() {
+        RocketMqProperties properties = new RocketMqProperties();
+        RocketMqIdempotencyStore store = new RocketMqIdempotencyStore(properties);
+
+        assertThat(store.tryMarkProcessed("business-group", "event-1")).isTrue();
+        assertThat(store.tryMarkProcessed("business-group", "event-1")).isFalse();
+        assertThat(store.tryMarkProcessed("audit-group", "event-1")).isTrue();
+    }
+
+    @Test
+    void deadLetterStoreSupportsQueryAndOneTimeReplayMarker() {
+        RocketMqProperties properties = new RocketMqProperties();
+        DeadLetterStore store = new DeadLetterStore(properties);
+        var saved = store.save(
+                "business-group",
+                "%DLQ%business-group",
+                "dlq-1",
+                "ORDER_CREATED",
+                "order-1",
+                3,
+                "{}");
+
+        assertThat(store.find(saved.recordId())).isPresent();
+        assertThat(store.markReplayed(saved.recordId())).isTrue();
+        assertThat(store.markReplayed(saved.recordId())).isFalse();
+        assertThat(store.find(saved.recordId()).orElseThrow().replayed()).isTrue();
+    }
+
+    @Test
+    void sameRocketMqMessageIdInDifferentDlqTopicsCreatesIndependentRecords() {
+        RocketMqProperties properties = new RocketMqProperties();
+        DeadLetterStore store = new DeadLetterStore(properties);
+
+        var business = store.save(
+                "business-group", "%DLQ%business-group", "same-message-id",
+                "ORDER_CREATED", "order-1", 5, "{}");
+        var audit = store.save(
+                "audit-group", "%DLQ%audit-group", "same-message-id",
+                "ORDER_CREATED", "order-1", 5, "{}");
+
+        assertThat(business.recordId()).isNotEqualTo(audit.recordId());
+        assertThat(store.findRecent(10))
+                .extracting(message -> message.consumerGroup())
+                .containsExactly("audit-group", "business-group");
+    }
+
+    @Test
+    void failureInjectionMatchesConfiguredConsumerGroupOrBoth() {
+        assertThat(RocketMqConstants.shouldSimulateFailure("business-group", "business-group")).isTrue();
+        assertThat(RocketMqConstants.shouldSimulateFailure("business-group", "audit-group")).isFalse();
+        assertThat(RocketMqConstants.shouldSimulateFailure("BOTH", "audit-group")).isTrue();
+    }
+
     private ConsumedMessage message(long sequence, String group, String tag) {
         return new ConsumedMessage(
                 sequence, group, "msg-" + sequence, "practice-order-topic",
-                tag, "order-" + sequence, 1, "{}", Instant.now());
+                tag, "order-" + sequence, 1, ConsumeStatus.CONSUMED, "{}", Instant.now());
     }
 }

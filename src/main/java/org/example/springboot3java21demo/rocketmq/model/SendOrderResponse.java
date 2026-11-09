@@ -13,12 +13,16 @@ public record SendOrderResponse(
         String messageId,
         String recallHandle,
         String status,
+        Integer delaySeconds,
+        String failConsumerGroup,
         Instant sentAt) {
 
     public static SendOrderResponse from(
             OrderEvent event,
             String topic,
-            SendReceipt receipt) {
+            SendReceipt receipt,
+            Integer delaySeconds,
+            String failConsumerGroup) {
         return new SendOrderResponse(
                 event.eventId(),
                 event.orderId(),
@@ -28,6 +32,8 @@ public record SendOrderResponse(
                 receipt.getMessageId().toString(),
                 receipt.getRecallHandle(),
                 "SENT",
+                delaySeconds,
+                failConsumerGroup,
                 Instant.now());
     }
 }

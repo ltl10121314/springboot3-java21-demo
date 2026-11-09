@@ -14,14 +14,18 @@ public class RocketMqProperties {
     private boolean enabled;
     private String endpoint = "127.0.0.1:8081";
     private String topic = "practice-order-topic";
+    private String delayTopic = "practice-order-delay-topic";
     private String businessConsumerGroup = "practice-order-business-group";
     private String auditConsumerGroup = "practice-order-audit-group";
+    private String deadLetterConsumerGroup = "practice-order-dlq-group";
     private String businessTags = "ORDER_CREATED || ORDER_PAID";
     private String auditTags = "ORDER_CREATED";
     private int requestTimeoutMs = 3000;
     private int sendMaxAttempts = 3;
     private int consumeThreadCount = 2;
     private int recentMessageLimit = 100;
+    private int deadLetterRecentLimit = 100;
+    private int idempotencyCacheSize = 1000;
 
     public boolean isEnabled() {
         return enabled;
@@ -47,6 +51,14 @@ public class RocketMqProperties {
         this.topic = topic;
     }
 
+    public String getDelayTopic() {
+        return delayTopic;
+    }
+
+    public void setDelayTopic(String delayTopic) {
+        this.delayTopic = delayTopic;
+    }
+
     public String getBusinessConsumerGroup() {
         return businessConsumerGroup;
     }
@@ -61,6 +73,22 @@ public class RocketMqProperties {
 
     public void setAuditConsumerGroup(String auditConsumerGroup) {
         this.auditConsumerGroup = auditConsumerGroup;
+    }
+
+    public String getDeadLetterConsumerGroup() {
+        return deadLetterConsumerGroup;
+    }
+
+    public void setDeadLetterConsumerGroup(String deadLetterConsumerGroup) {
+        this.deadLetterConsumerGroup = deadLetterConsumerGroup;
+    }
+
+    public String getBusinessDeadLetterTopic() {
+        return "%DLQ%" + businessConsumerGroup;
+    }
+
+    public String getAuditDeadLetterTopic() {
+        return "%DLQ%" + auditConsumerGroup;
     }
 
     public String getBusinessTags() {
@@ -109,5 +137,21 @@ public class RocketMqProperties {
 
     public void setRecentMessageLimit(int recentMessageLimit) {
         this.recentMessageLimit = recentMessageLimit;
+    }
+
+    public int getDeadLetterRecentLimit() {
+        return deadLetterRecentLimit;
+    }
+
+    public void setDeadLetterRecentLimit(int deadLetterRecentLimit) {
+        this.deadLetterRecentLimit = deadLetterRecentLimit;
+    }
+
+    public int getIdempotencyCacheSize() {
+        return idempotencyCacheSize;
+    }
+
+    public void setIdempotencyCacheSize(int idempotencyCacheSize) {
+        this.idempotencyCacheSize = idempotencyCacheSize;
     }
 }

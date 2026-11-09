@@ -1,5 +1,6 @@
 package org.example.springboot3java21demo.rocketmq.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.springboot3java21demo.rocketmq.model.ConsumedMessage;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * 仅用于练习观察的内存消费记录，生产环境应写入数据库、搜索服务或可观测平台。
  */
 @Component
+@Slf4j
 public class ConsumedMessageStore {
 
     private final Map<String, ConcurrentLinkedDeque<ConsumedMessage>> messagesByGroup =
@@ -31,6 +33,8 @@ public class ConsumedMessageStore {
         while (messages.size() > Math.max(limit, 1)) {
             messages.pollLast();
         }
+        log.debug("消费记录入队 consumerGroup={}, messageId={}, status={}, groupQueueSize={}",
+                message.consumerGroup(), message.messageId(), message.status(), messages.size());
     }
 
     public List<ConsumedMessage> findRecent(String consumerGroup, int limit) {
@@ -48,6 +52,12 @@ public class ConsumedMessageStore {
     }
 
     public void clear() {
+        int groupCount = messagesByGroup.size();
         messagesByGroup.clear();
+        log.info("消费记录缓存已清空 groupCount={}", groupCount);
+    }
+
+    public int size() {
+        return messagesByGroup.values().stream().mapToInt(ConcurrentLinkedDeque::size).sum();
     }
 }

@@ -48,8 +48,12 @@ services:
     command: >
       sh -lc "sleep 10;
       sh mqadmin updateTopic -n namesrv:9876 -c DefaultCluster -t practice-order-topic -r 8 -w 8;
-      sh mqadmin updateSubGroup -n namesrv:9876 -c DefaultCluster -g practice-order-business-group;
-      sh mqadmin updateSubGroup -n namesrv:9876 -c DefaultCluster -g practice-order-audit-group"
+      sh mqadmin updateTopic -n namesrv:9876 -c DefaultCluster -t practice-order-delay-topic -r 8 -w 8 -a +message.type=DELAY;
+      sh mqadmin updateTopic -n namesrv:9876 -c DefaultCluster -t '%DLQ%practice-order-business-group' -r 1 -w 1;
+      sh mqadmin updateTopic -n namesrv:9876 -c DefaultCluster -t '%DLQ%practice-order-audit-group' -r 1 -w 1;
+      sh mqadmin updateSubGroup -n namesrv:9876 -c DefaultCluster -g practice-order-business-group -r 2;
+      sh mqadmin updateSubGroup -n namesrv:9876 -c DefaultCluster -g practice-order-audit-group -r 2;
+      sh mqadmin updateSubGroup -n namesrv:9876 -c DefaultCluster -g practice-order-dlq-group -r 2"
     restart: "no"
     networks:
       - rocketmq

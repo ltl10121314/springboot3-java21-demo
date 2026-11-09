@@ -5,5 +5,7 @@ public record AsyncSendResponse(
         String orderId,
         String status,
         String topic,
-        String tag) {
+        String tag,
+        Integer delaySeconds,
+        String failConsumerGroup) {
 }
