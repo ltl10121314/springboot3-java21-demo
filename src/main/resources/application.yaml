@@ -46,7 +46,8 @@ spring:
           max-wait: 100
 
 server:
-  port: 8081
+  # RocketMQ Proxy 默认占用 8081，应用改用 18081 避免端口冲突。
+  port: 18081
 
 # MyBatis配置
 mybatis:
@@ -63,6 +64,25 @@ mybatis:
 
 printTime:
   cron: 0/10 * * * * ?
+
+# RocketMQ 实战示例。默认关闭，避免本地未启动 RocketMQ 时影响项目启动。
+# 启动 Broker 后通过 APP_ROCKETMQ_ENABLED=true 或 --app.rocketmq.enabled=true 开启。
+app:
+  rocketmq:
+    enabled: false
+    # RocketMQ 5.x 新客户端连接 Proxy 的 gRPC Endpoint，而不是 NameServer。
+    endpoint: 127.0.0.1:8081
+    topic: practice-order-topic
+    business-consumer-group: practice-order-business-group
+    audit-consumer-group: practice-order-audit-group
+    # RocketMQ Tag 过滤表达式使用 || 表示“或”。
+    business-tags: "ORDER_CREATED || ORDER_PAID"
+    # 审计组只订阅 ORDER_CREATED，用于演示同一 Topic 下的 Tag 隔离。
+    audit-tags: "ORDER_CREATED"
+    request-timeout-ms: 3000
+    send-max-attempts: 3
+    consume-thread-count: 2
+    recent-message-limit: 100
 
 # openapi
 #springdoc:

@@ -29,7 +29,7 @@ public class SsoAppController {
     /** 认证中心地址（真实部署中是独立的 SSO 服务地址，可配置） */
     private final RestClient ssoClient;
 
-    public SsoAppController(@Value("${sso.server-url:http://localhost:8081}") String ssoServerUrl) {
+    public SsoAppController(@Value("${sso.server-url:http://localhost:18081}") String ssoServerUrl) {
         this.ssoClient = RestClient.builder().baseUrl(ssoServerUrl).build();
     }
 

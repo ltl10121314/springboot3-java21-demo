@@ -30,6 +30,7 @@
         <java.version>21</java.version>
         <!-- SkyWalking agent 与 toolkit 版本必须一致，否则 @Trace / TraceContext 不会生效 -->
         <skywalking.version>9.3.0</skywalking.version>
+        <rocketmq.version>5.2.2</rocketmq.version>
     </properties>
     <dependencies>
         <!--springboot-->
@@ -45,6 +46,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -159,6 +164,12 @@
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
             <version>3.5.1</version>
+        </dependency>
+        <!-- RocketMQ 5.x gRPC Java 客户端：Producer、PushConsumer、Tag 过滤 -->
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-client-java</artifactId>
+            <version>${rocketmq.version}</version>
         </dependency>
 
         <!--

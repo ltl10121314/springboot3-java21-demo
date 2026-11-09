@@ -647,23 +647,23 @@ mvn test -Dtest=PaymentFrameworkTest
 mvn spring-boot:run
 
 # 发起支付
-curl -X POST http://localhost:8081/api/payment/pay \
+curl -X POST http://localhost:18081/api/payment/pay \
   -H 'Content-Type: application/json' \
   -H 'X-Trace-Id: demo-trace-001' \
   -d '{"requestId":"REQ-1","orderNo":"ORD-1","userId":"U1","amount":2.00,
        "channel":"MOCK","skuId":"DEMO-SKU-001","quantity":1}'
 
 # 重复提交同一个 requestId → 返回相同 paymentNo，duplicate = true
-curl 'http://localhost:8081/api/payment/query?requestId=REQ-1'
+curl 'http://localhost:18081/api/payment/query?requestId=REQ-1'
 
 # 查看库存（total / reserved / sold）
-curl 'http://localhost:8081/api/payment/stock?skuId=DEMO-SKU-001'
+curl 'http://localhost:18081/api/payment/stock?skuId=DEMO-SKU-001'
 
 # 运维闭环
-curl -X POST 'http://localhost:8081/api/payment/admin/outbox/relay'
-curl -X POST 'http://localhost:8081/api/payment/admin/compensate'
-curl -X POST 'http://localhost:8081/api/payment/admin/reconcile'
-curl 'http://localhost:8081/api/payment/admin/metrics'
+curl -X POST 'http://localhost:18081/api/payment/admin/outbox/relay'
+curl -X POST 'http://localhost:18081/api/payment/admin/compensate'
+curl -X POST 'http://localhost:18081/api/payment/admin/reconcile'
+curl 'http://localhost:18081/api/payment/admin/metrics'
 ```
 
 `@Scheduled` 已随 `PaymentConfig` 打开：中继每 2s、补偿每 5s 自动跑一轮，
