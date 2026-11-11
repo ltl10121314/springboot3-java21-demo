@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: user-service
+  main:
+    allow-circular-references: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL:jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&allowMultiQueries=true}
+    username: ${MYSQL_USERNAME:dev}
+    password: ${MYSQL_PASSWORD:123456}
+server:
+  port: ${USER_SERVER_PORT:18082}
+  shutdown: graceful
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

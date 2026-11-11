@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: payment-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${PAYMENT_MYSQL_URL:jdbc:mysql://127.0.0.1:3306/order_payment?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true}
+    username: ${PAYMENT_MYSQL_USERNAME:dev}
+    password: ${PAYMENT_MYSQL_PASSWORD:123456}
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/payment-schema.sql
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+server:
+  port: ${PAYMENT_SERVER_PORT:18083}
+  shutdown: graceful
+
+payment-service:
+  nacos:
+    enabled: ${NACOS_ENABLED:true}
+    server-address: ${NACOS_SERVER_ADDRESS:127.0.0.1:8848}
+    namespace: ${NACOS_NAMESPACE:}
+    data-id: payment-service.properties
+    group: DEFAULT_GROUP
+  gateway:
+    allowed-channels:
+      - ALIPAY
+      - WECHAT
+      - MOCK
+    success-rate: ${PAYMENT_SUCCESS_RATE:1.0}
+    unknown-rate: ${PAYMENT_UNKNOWN_RATE:0.0}
+    latency-millis: ${PAYMENT_LATENCY_MS:80}
+
+dubbo:
+  application:
+    name: payment-service
+    qos-enable: false
+    register-mode: interface
+    metadata-type: local
+  registry:
+    address: nacos://${NACOS_HOST:127.0.0.1}:${NACOS_PORT:8848}
+  protocol:
+    name: dubbo
+    port: ${PAYMENT_DUBBO_PORT:20882}
+    serialization: fastjson2
+  provider:
+    timeout: 5000
+    retries: 0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

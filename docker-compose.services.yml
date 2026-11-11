@@ -1,0 +1,103 @@
+name: backend-services
+
+services:
+  payment-service:
+    build:
+      context: .
+      dockerfile: payment-service/Dockerfile
+    image: order-payment/payment-service:local
+    container_name: dev-payment-service
+    restart: unless-stopped
+    ports:
+      - "18083:18083"
+      - "20882:20882"
+    environment:
+      PAYMENT_MYSQL_URL: "jdbc:mysql://mysql:3306/order_payment?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true"
+      PAYMENT_MYSQL_USERNAME: ${MYSQL_USER:-dev}
+      PAYMENT_MYSQL_PASSWORD: ${MYSQL_PASSWORD:-123456}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      NACOS_SERVER_ADDRESS: nacos:8848
+      NACOS_HOST: nacos
+      NACOS_PORT: 8848
+    volumes:
+      - ./logs/payment-service:/app/logs
+    networks:
+      - backend
+
+  order-service:
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
+    image: order-payment/order-service:local
+    container_name: dev-order-service
+    restart: unless-stopped
+    depends_on:
+      - payment-service
+    ports:
+      - "18081:18081"
+      - "20880:20880"
+    environment:
+      MYSQL_URL: "jdbc:mysql://mysql:3306/test?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&allowMultiQueries=true"
+      MYSQL_USERNAME: ${MYSQL_USER:-dev}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-123456}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      NACOS_SERVER_ADDRESS: nacos:8848
+      NACOS_HOST: nacos
+      NACOS_PORT: 8848
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      ELASTICSEARCH_URIS: http://elasticsearch:9200
+      ROCKETMQ_ENDPOINT: rocketmq-proxy:8081
+    volumes:
+      - ./logs/order-service:/app/logs
+    networks:
+      - backend
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    image: order-payment/user-service:local
+    container_name: dev-user-service
+    restart: unless-stopped
+    ports:
+      - "18082:18082"
+    environment:
+      MYSQL_URL: "jdbc:mysql://mysql:3306/test?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&allowMultiQueries=true"
+      MYSQL_USERNAME: ${MYSQL_USER:-dev}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-123456}
+    volumes:
+      - ./logs/user-service:/app/logs
+    networks:
+      - backend
+
+  practice-service:
+    build:
+      context: .
+      dockerfile: practice-service/Dockerfile
+    image: order-payment/practice-service:local
+    container_name: dev-practice-service
+    restart: unless-stopped
+    ports:
+      - "18084:18084"
+    environment:
+      MYSQL_URL: "jdbc:mysql://mysql:3306/test?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true"
+      MYSQL_USERNAME: ${MYSQL_USER:-dev}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-123456}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      APP_ROCKETMQ_ENABLED: ${APP_ROCKETMQ_ENABLED:-false}
+      APP_ROCKETMQ_ENDPOINT: rocketmq-proxy:8081
+    volumes:
+      - ./logs/practice-service:/app/logs
+    networks:
+      - backend
+
+networks:
+  backend:
+    external: true
+    name: backend

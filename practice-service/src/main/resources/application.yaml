@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: practice-service
+  main:
+    allow-circular-references: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL:jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true}
+    username: ${MYSQL_USERNAME:dev}
+    password: ${MYSQL_PASSWORD:123456}
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: 100
+
+server:
+  port: ${PRACTICE_SERVER_PORT:18084}
+  shutdown: graceful
+
+app:
+  rocketmq:
+    enabled: ${APP_ROCKETMQ_ENABLED:false}
+    endpoint: ${APP_ROCKETMQ_ENDPOINT:127.0.0.1:8081}
+    topic: practice-order-topic
+    delay-topic: practice-order-delay-topic
+    business-consumer-group: practice-order-business-group
+    audit-consumer-group: practice-order-audit-group
+    dead-letter-consumer-group: practice-order-dlq-group
+    business-tags: "ORDER_CREATED || ORDER_PAID"
+    audit-tags: "ORDER_CREATED"
+    request-timeout-ms: 3000
+    send-max-attempts: 3
+    consume-thread-count: 2
+    recent-message-limit: 100
+    dead-letter-recent-limit: 100
+    idempotency-cache-size: 1000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

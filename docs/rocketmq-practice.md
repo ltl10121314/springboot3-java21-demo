@@ -57,7 +57,7 @@ RocketMQ 5.x 的延迟消息要求 Topic 元数据声明 `message.type=DELAY`，
 当前较完整的一套 Compose 位于用户目录，包含 NameServer、Broker、Proxy 和 Dashboard。先确认四个容器均正常：
 
 ```bash
-docker compose -f /Users/liutianlong/docker/rocketmq/docker-compose.yml up -d
+docker compose -f "$HOME/docker/rocketmq/docker-compose.yml" up -d
 docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
 ```
 
@@ -121,7 +121,8 @@ IDEA 启动参数：
 --app.rocketmq.endpoint=127.0.0.1:8081
 ```
 
-配置位于 `src/main/resources/application.yaml` 的 `app.rocketmq` 节点：
+该教程代码已组装为独立的 `practice-service`。配置位于
+`practice-service/src/main/resources/application.yaml` 的 `app.rocketmq` 节点：
 
 ```yaml
 app:

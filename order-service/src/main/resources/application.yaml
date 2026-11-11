@@ -1,0 +1,109 @@
+spring:
+  application:
+    name: order-service
+  # 数据库信息
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL:jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&allowMultiQueries=true}
+    username: ${MYSQL_USERNAME:dev}
+    password: ${MYSQL_PASSWORD:123456}
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/order-pay-schema.sql
+      data-locations: classpath:db/order-pay-data.sql
+      continue-on-error: false
+  # redis
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      lettuce:
+        pool:
+          # 最大连接
+          max-active: 8
+          # 最大控线连接
+          max-idle: 8
+          # 最小空闲连接
+          min-idle: 0
+          # 连接等待时间
+          max-wait: 100
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URIS:http://127.0.0.1:9200}
+    connection-timeout: 3s
+    socket-timeout: 10s
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:127.0.0.1:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      properties:
+        enable.idempotence: true
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+
+server:
+  # RocketMQ Proxy 默认占用 8081，应用改用 18081 避免端口冲突。
+  port: 18081
+  shutdown: graceful
+
+# 订单服务配置。支付规则和支付流水已拆分到 payment-service。
+order-pay:
+  timeout-seconds: ${ORDER_TIMEOUT_SECONDS:120}
+  default-channel: ALIPAY
+  nacos:
+    enabled: ${NACOS_ENABLED:true}
+    server-address: ${NACOS_SERVER_ADDRESS:127.0.0.1:8848}
+    namespace: ${NACOS_NAMESPACE:}
+    data-id: order-service.properties
+    group: DEFAULT_GROUP
+    timeout-millis: 3000
+  kafka:
+    topic: order-pay-events
+    group-id: order-pay-indexer
+  rocketmq:
+    enabled: ${ROCKETMQ_ENABLED:true}
+    endpoint: ${ROCKETMQ_ENDPOINT:127.0.0.1:8081}
+    topic: order-pay-timeout-topic
+    consumer-group: order-pay-timeout-consumer
+    request-timeout-millis: 3000
+  search:
+    index: order-pay-orders
+  outbox:
+    batch-size: 50
+    retry-delay-seconds: 5
+
+# 订单服务通过 Nacos 发现独立支付服务。
+dubbo:
+  application:
+    name: order-service
+    qos-enable: false
+    register-mode: interface
+    metadata-type: local
+  registry:
+    address: nacos://${NACOS_HOST:127.0.0.1}:${NACOS_PORT:8848}
+  protocol:
+    name: dubbo
+    port: ${DUBBO_PORT:20880}
+    serialization: fastjson2
+  provider:
+    timeout: 5000
+    retries: 0
+  consumer:
+    check: false
+    timeout: 5000
+    retries: 0
+
+# openapi
+#springdoc:
+#  api-docs:
+#    path: /api-docs
+#  swagger-ui:
+#    path: /swagger-ui.html
+#    configUrl: /v3/api-docs/swagger-config
+#  packages-to-scan: org.example.springboot3java21demo

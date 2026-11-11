@@ -55,10 +55,12 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: my_test
+          MYSQL_USER: dev
+          MYSQL_PASSWORD: "123456"
         ports:
           - 3306:3306
         options: >-
-          --health-cmd "mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -udev -p123456"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 15
@@ -76,8 +78,8 @@ jobs:
     env:
       # 覆盖 src/main/resources/application.yaml 中的本地连接配置
       SPRING_DATASOURCE_URL: "jdbc:mysql://127.0.0.1:3306/my_test?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&allowMultiQueries=true"
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_USERNAME: dev
+      SPRING_DATASOURCE_PASSWORD: "123456"
       SPRING_DATA_REDIS_HOST: 127.0.0.1
       SPRING_DATA_REDIS_PORT: "6379"
       JAVA_TOOL_OPTIONS: "-Dfile.encoding=UTF-8"
