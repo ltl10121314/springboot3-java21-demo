@@ -28,6 +28,31 @@ java -jar practice-service/target/practice-service-0.0.1-SNAPSHOT.jar
 
 该服务定位为开发和练习环境，不承载订单、支付、用户等生产业务数据。
 
+## 数据库示例表
+
+`practice-service` 不创建也不维护业务表。JDBC 示例读取现有的外部 `my_test` 示例库，
+字段说明仅用于理解示例 SQL：
+
+`my_test.user`：
+
+| 字段 | 含义 |
+| --- | --- |
+| `id` | 用户主键。 |
+| `code` | 用户业务编码。 |
+| `name` | 用户名称。 |
+| `age` | 用户年龄，示例表使用字符串类型。 |
+| `address` | 用户地址。 |
+
+`my_test.student`：
+
+| 字段 | 含义 |
+| --- | --- |
+| `id` | 学生主键。 |
+| `name` | 学生姓名。 |
+| `age` | 学生年龄。 |
+| `beginDate` | 记录开始时间，默认使用创建时间。 |
+| `endDate` | 记录结束时间，并随记录更新自动刷新。 |
+
 ## 源码目录
 
 源码根包为 `org.example.practice`，按照练习主题而不是原来的历史文件来源划分：

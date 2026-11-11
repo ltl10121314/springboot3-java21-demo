@@ -114,6 +114,14 @@ BACKEND_DATA_ROOT="$HOME/docker/backend" \
   docker compose -f docker-compose.middleware.yml up -d
 ```
 
+已有 MySQL 表补齐中文字段注释：
+
+```bash
+docker exec -i dev-mysql sh -lc \
+  'MYSQL_PWD=123456 mysql -h127.0.0.1 -udev --default-character-set=utf8mb4' \
+  < scripts/apply-table-column-comments.sql
+```
+
 ## 支付接口
 
 创建订单：
@@ -133,6 +141,32 @@ curl -X POST http://127.0.0.1:18081/api/order-pay/orders/ORD-REPLACE-ME/pay \
   -H 'X-Trace-Id: order-pay-demo' \
   -d '{"requestId":"PAY-REQ-001","channel":"ALIPAY"}'
 ```
+
+## 库存管理接口
+
+订单服务提供独立库存管理接口。`SKU` 会自动去除首尾空格并转为大写，
+`availableStock` 始终按 `totalStock - reservedStock - soldStock` 计算。
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| `POST` | `/api/order-pay/inventory` | 创建库存 |
+| `GET` | `/api/order-pay/inventory` | 分页查询，支持 `keyword`、`page`、`size` |
+| `GET` | `/api/order-pay/inventory/{skuId}` | 查询库存详情 |
+| `PUT` | `/api/order-pay/inventory/{skuId}` | 更新名称、价格和库存总量 |
+| `PUT` | `/api/order-pay/inventory/{skuId}/stock` | 单独调整库存总量 |
+| `DELETE` | `/api/order-pay/inventory/{skuId}` | 删除无预占、无已售库存的 SKU |
+
+创建库存示例：
+
+```bash
+curl -X POST http://127.0.0.1:18081/api/order-pay/inventory \
+  -H 'Content-Type: application/json' \
+  -H 'X-Trace-Id: inventory-create-demo' \
+  -d '{"skuId":"SKU-2001","skuName":"演示商品","price":99.00,"totalStock":100}'
+```
+
+库存总量不能小于 `reservedStock + soldStock`。订单预占、确认和释放仍由订单生命周期
+内部完成，不通过管理接口直接操作，避免破坏订单与库存的一致性。
 
 完整架构、数据表、异常处理和验证方法见
 [订单支付微服务架构](docs/order-payment-architecture.md)。

@@ -61,12 +61,69 @@ sequenceDiagram
 | --- | --- | --- |
 | `order-service` | `test` | `op_order`、`op_inventory`、`op_outbox_event` |
 | `payment-service` | `order_payment` | `op_payment` |
+| 历史兼容表 | `test` | `op_payment`（保留旧数据，不参与新支付流程） |
 
 初始化脚本：
 
 - `order-service/src/main/resources/db/order-pay-schema.sql`
 - `order-service/src/main/resources/db/order-pay-data.sql`
 - `payment-service/src/main/resources/db/payment-schema.sql`
+- `user-service/src/main/resources/script/create_user_data.sql`
+- `user-service/src/main/resources/script/create_student_data.sql`
+- `scripts/apply-table-column-comments.sql`（为已有 MySQL 表补列注释）
+
+### 3.1 订单服务表字段
+
+`op_order`：
+
+| 字段 | 含义 |
+| --- | --- |
+| `order_no` | 订单业务主键。 |
+| `request_id` | 创建订单幂等键，避免重复下单。 |
+| `user_id` | 下单用户标识。 |
+| `sku_id` | 商品 SKU 标识。 |
+| `sku_name` | 下单时保存的商品名称快照。 |
+| `unit_price` | 下单时保存的商品单价快照。 |
+| `quantity` | 购买数量。 |
+| `total_amount` | 订单总金额，等于单价乘数量。 |
+| `status` | 订单状态：`CREATED`、`PAYING`、`PAID`、`CANCELLED` 或 `CLOSED`。 |
+| `payment_no` | 当前支付尝试的支付单号，未支付时为空。 |
+| `version` | 乐观锁版本号，订单状态每次变更时递增。 |
+| `created_at` | 订单创建时间。 |
+| `updated_at` | 订单最后更新时间。 |
+| `paid_at` | 支付成功时间，未支付时为空。 |
+
+`op_inventory`：
+
+| 字段 | 含义 |
+| --- | --- |
+| `sku_id` | 商品 SKU 标识，同时是主键。 |
+| `sku_name` | 商品名称。 |
+| `price` | 当前销售单价。 |
+| `total_stock` | 总库存，必须不小于预占库存与已售库存之和。 |
+| `reserved_stock` | 已创建订单但尚未支付成功的预占库存。 |
+| `sold_stock` | 支付成功后已确认售出的库存。 |
+| `updated_at` | 库存记录最后更新时间。 |
+
+当前可售库存按 `total_stock - reserved_stock - sold_stock` 计算。
+
+`op_outbox_event`：
+
+| 字段 | 含义 |
+| --- | --- |
+| `id` | 数据库自增主键，用于投递排序和定位记录。 |
+| `event_id` | 事件业务唯一标识，用于消费端幂等。 |
+| `aggregate_id` | 关联聚合标识，订单事件通常保存订单号。 |
+| `event_type` | 事件类型，如 `ORDER_CREATED`、`PAYMENT_SUCCESS`、`ORDER_TIMEOUT_CHECK`。 |
+| `destination` | 投递目标，当前为 `KAFKA` 或 `ROCKETMQ`。 |
+| `payload` | 事件 JSON 内容，同时携带关联 TraceId。 |
+| `available_at` | Outbox 最早可再次投递时间，失败重试时向后顺延。 |
+| `deliver_at` | 消息业务期望投递时间，RocketMQ 延迟关单使用该字段。 |
+| `status` | 投递状态，`PENDING` 待投递，`SENT` 已成功投递。 |
+| `retry_count` | 投递失败后的重试次数。 |
+| `last_error` | 最近一次失败原因，投递成功后清空。 |
+| `created_at` | Outbox 事件创建时间。 |
+| `sent_at` | 成功投递时间，尚未投递时为空。 |
 
 ## 4. Dubbo 契约
 

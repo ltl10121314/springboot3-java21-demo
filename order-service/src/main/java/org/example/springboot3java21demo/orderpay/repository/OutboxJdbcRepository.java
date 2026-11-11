@@ -13,17 +13,23 @@ import java.util.List;
 @Repository
 public class OutboxJdbcRepository {
 
-    private static final RowMapper<OutboxRecord> ROW_MAPPER = (rs, rowNum) -> new OutboxRecord(
-            rs.getLong("id"),
-            rs.getString("event_id"),
-            rs.getString("aggregate_id"),
-            rs.getString("event_type"),
-            rs.getString("destination"),
-            rs.getString("payload"),
-            rs.getTimestamp("available_at").toInstant(),
-            rs.getTimestamp("deliver_at").toInstant(),
-            rs.getString("status"),
-            rs.getInt("retry_count"));
+    private static final RowMapper<OutboxRecord> ROW_MAPPER = (rs, rowNum) -> {
+        Timestamp sentAt = rs.getTimestamp("sent_at");
+        return new OutboxRecord(
+                rs.getLong("id"),
+                rs.getString("event_id"),
+                rs.getString("aggregate_id"),
+                rs.getString("event_type"),
+                rs.getString("destination"),
+                rs.getString("payload"),
+                rs.getTimestamp("available_at").toInstant(),
+                rs.getTimestamp("deliver_at").toInstant(),
+                rs.getString("status"),
+                rs.getInt("retry_count"),
+                rs.getString("last_error"),
+                rs.getTimestamp("created_at").toInstant(),
+                sentAt == null ? null : sentAt.toInstant());
+    };
 
     private final NamedParameterJdbcTemplate jdbc;
 
@@ -61,7 +67,8 @@ public class OutboxJdbcRepository {
     public List<OutboxRecord> findDue(int limit) {
         return jdbc.query("""
                 SELECT id, event_id, aggregate_id, event_type, destination, payload,
-                       available_at, deliver_at, status, retry_count
+                       available_at, deliver_at, status, retry_count,
+                       last_error, created_at, sent_at
                   FROM op_outbox_event
                  WHERE status = 'PENDING'
                    AND available_at <= :now

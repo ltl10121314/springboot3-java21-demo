@@ -24,6 +24,29 @@ java -jar payment-service/target/payment-service-0.0.1-SNAPSHOT.jar
 
 Dubbo 契约只来自 `payment-api`。订单服务和支付服务不会各自维护同名 DTO。
 
+## `op_payment` 字段
+
+| 字段 | 含义 |
+| --- | --- |
+| `payment_no` | 平台支付单号，支付流水主键。 |
+| `request_id` | 支付请求幂等键，同一支付请求只能创建一条流水。 |
+| `order_no` | 关联订单号。 |
+| `amount` | 本次支付金额。 |
+| `channel` | 支付渠道，如 `ALIPAY`、`WECHAT`。 |
+| `status` | 支付状态，见下表。 |
+| `channel_trade_no` | 支付渠道返回的第三方交易号。 |
+| `fail_reason` | 渠道明确失败时的原因。 |
+| `version` | 乐观锁版本号，状态变更时递增。 |
+| `created_at` | 支付流水创建时间。 |
+| `updated_at` | 支付流水最后更新时间。 |
+
+支付状态：
+
+- `PROCESSING`：正在调用渠道或等待渠道结果。
+- `SUCCESS`：渠道明确返回支付成功。
+- `FAILED`：渠道明确返回支付失败。
+- `UNKNOWN`：超时或网络异常导致结果未知，不能直接按失败处理。
+
 主要环境变量：
 
 | 变量 | 默认值 |

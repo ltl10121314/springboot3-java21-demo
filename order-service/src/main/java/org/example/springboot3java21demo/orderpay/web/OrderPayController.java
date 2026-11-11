@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.example.springboot3java21demo.orderpay.config.NacosRuntimeConfig;
 import org.example.springboot3java21demo.orderpay.config.OrderPayProperties;
-import org.example.springboot3java21demo.orderpay.domain.InventoryRecord;
 import org.example.springboot3java21demo.orderpay.domain.OrderRecord;
 import org.example.springboot3java21demo.orderpay.repository.OutboxJdbcRepository;
 import org.example.springboot3java21demo.orderpay.rpc.PaymentRpcFacade;
@@ -152,14 +151,6 @@ public class OrderPayController {
         searchService.index(orderApplicationService.requireOrder(orderNo));
         log.info("订单搜索索引重建完成 orderNo={}", orderNo);
         return ApiResult.ok(orderApplicationService.getOrder(orderNo));
-    }
-
-    @GetMapping("/inventory/{skuId}")
-    public ApiResult<InventoryRecord> inventory(@PathVariable String skuId) {
-        InventoryRecord inventory = orderApplicationService.inventory(skuId);
-        log.debug("查询库存完成 skuId={}, available={}, reserved={}, sold={}",
-                skuId, inventory.availableStock(), inventory.reservedStock(), inventory.soldStock());
-        return ApiResult.ok(inventory);
     }
 
     @GetMapping("/info")

@@ -22,6 +22,8 @@
         <dubbo.version>3.3.0</dubbo.version>
         <nacos-client.version>2.4.3</nacos-client.version>
         <rocketmq.version>5.2.2</rocketmq.version>
+        <mybatis-plus.version>3.5.12</mybatis-plus.version>
+        <mybatis.version>3.5.19</mybatis.version>
     </properties>
 
     <dependencies>
@@ -67,6 +69,17 @@
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <!-- 表字段映射注解；现有数据访问仍使用 NamedParameterJdbcTemplate。 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-annotation</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
